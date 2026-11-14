@@ -52,6 +52,7 @@
                 var r = (Math.random() * 3) | 0;
                 var dst = src - r + 1;                         // wind drift
                 var v = h - (r & 1) - (Math.random() < extraDecay ? 1 : 0);
+                if (v < 0) v = 0;          // Uint8Array would wrap -1 to 255 and break the palette lookup
                 heat[(dst < W ? src : dst) - W] = v;
             }
         }
