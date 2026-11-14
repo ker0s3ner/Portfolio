@@ -18,6 +18,25 @@ The site is static HTML with a LaTeX-style title block on the home page, plus a 
 | `pentesting.html` | Penetration testing terminal write-up |
 | `surveillance.html` | Surveillance system write-up |
 
+## Background and blog
+
+- `assets/spectral-bg.js` draws the page background: a red DOOM-style fire (heat-diffusion cellular automaton) plus spectral-theory formulas, typeset once by MathJax, that fade in and out in place. The formula list is the `TEX` array in that file.
+- `assets/site.css` holds the styles shared by the home page and the blog.
+- `posts/*.md` are blog posts. `npm run build` turns them into `blog/` (index, one page per post, `posts.json`, `feed.xml`). `blog/` is generated and git-ignored; Vercel builds it on deploy.
+
+### Writing a monthly post
+
+1. Create `posts/YYYY-MM-your-slug.md`:
+   ```
+   ---
+   title: Your title
+   date: 2026-12-14
+   summary: One sentence shown on the home page and blog index.
+   ---
+   Body in markdown. Math with $inline$ and $$display$$.
+   ```
+2. `npm run build`, open `blog/` to check it, commit, push. Files starting with `_` are ignored (use them for drafts).
+
 ## Development
 
 Requires Node.js.
@@ -38,4 +57,4 @@ Deployed on Vercel. `vercel.json` runs `npm run build`, serves the repo root, an
 
 ## Contact
 
-GitHub: [@ker0s3ner](https://github.com/ker0s3ner)
+GitHub: [@ker0s3ner](https://github.com/ker0s3ner) · LinkedIn: [benaspetronis](https://www.linkedin.com/in/benaspetronis/)

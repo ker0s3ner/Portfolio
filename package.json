@@ -10,16 +10,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Bencode12/port.git"
+    "url": "git+https://github.com/ker0s3ner/port.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/Bencode12/port/issues"
+    "url": "https://github.com/ker0s3ner/port/issues"
   },
-  "homepage": "https://github.com/Bencode12/port#readme",
+  "homepage": "https://github.com/ker0s3ner/port#readme",
   "dependencies": {
     "framer-motion": "^12.38.0",
     "react": "^18.3.1",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.28.0",
-    "esbuild-plugin-jsx": "^1.0.1"
+    "esbuild-plugin-jsx": "^1.0.1",
+    "marked": "^12.0.2"
   }
 }

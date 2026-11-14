@@ -4,6 +4,10 @@
   "installCommand": "npm install",
   "rewrites": [
     {
+      "source": "/blog",
+      "destination": "/blog/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

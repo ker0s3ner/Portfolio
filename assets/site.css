@@ -1,0 +1,181 @@
+/* Shared styles: home page and blog. */
+@import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman:wght@400;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; }
+html::-webkit-scrollbar { display: none; }
+
+::selection { background: rgba(255, 122, 69, 0.3); color: #fff; }
+
+body {
+    font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', serif;
+    background: #05060b;
+    color: #e0e0e0;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Background: DOOM-style fire + fading formulas ---- */
+#spectral-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    background: #05060b;
+}
+#spectral-bg canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+    opacity: .42;
+}
+#spectral-bg::after {            /* fade the top so text stays readable */
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(5, 6, 11, 0.9) 0%, rgba(5, 6, 11, 0.35) 55%, rgba(5, 6, 11, 0) 100%);
+    pointer-events: none;
+}
+#spectral-formulas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+.sf {
+    position: absolute;
+    color: rgba(235, 238, 248, 0.6);
+    white-space: nowrap;
+    opacity: 0;
+    animation: sf-life var(--dur, 10s) ease-in-out forwards;
+}
+.sf svg { display: block; overflow: visible; }
+@keyframes sf-life {          /* fade in, hold, fade out. No movement. */
+    0%, 100% { opacity: 0; }
+    25%, 75% { opacity: .6; }
+}
+
+/* ---- Layout ---- */
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 26px;
+    justify-content: center;
+    padding: 6px 0 0;
+    font-size: 1rem;
+}
+.site-nav a { color: #8f9bb3; text-decoration: none; }
+.site-nav a:hover, .site-nav a:focus-visible { color: #ffa36e; outline: none; }
+.site-nav a[aria-current="page"] { color: #fff; }
+
+header { margin-bottom: 60px; padding-top: 36px; text-align: center; }
+
+.latex-title, .latex-author, .latex-date {
+    font-weight: 400;
+    color: #999;
+}
+.latex-title  { font-size: 2.2rem; margin-bottom: 8px; }
+.latex-author { font-size: 1.4rem; margin-bottom: 8px; }
+.latex-date   { font-size: 1.1rem; margin-bottom: 40px; color: #666; }
+.latex-title .content  { color: #fff; font-weight: 700; }
+.latex-author .content { color: #e0e0e0; }
+.latex-date .content   { color: #888; font-style: italic; }
+
+.subtitle { font-size: 1.1rem; color: #888; margin-bottom: 30px; font-style: italic; }
+.intro    { font-size: 1.05rem; line-height: 1.8; margin-bottom: 20px; color: #b0b0b0; text-align: left; }
+
+.contact-links { margin-top: 20px; text-align: left; display: flex; flex-wrap: wrap; gap: 8px 30px; }
+.contact-links a, .contact-links span { color: #ff7a45; text-decoration: none; }
+.contact-links a:hover, .contact-links a:focus-visible { color: #ffa36e; outline: none; }
+
+/* ---- LaTeX-style headings ---- */
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 400;
+    margin: 80px 0 36px;
+    color: #fff;
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+}
+.subsection-title {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin: 44px 0 22px;
+    color: #cfd6e6;
+}
+.tex { color: #9aa3b8; font-size: .8em; }   /* the \section{ and } scaffolding */
+
+a.plain { color: #ff7a45; text-decoration: none; }
+a.plain:hover { color: #ffa36e; }
+
+footer {
+    margin-top: 100px;
+    padding: 40px 0;
+    border-top: 1px solid #333;
+    color: #666;
+    font-size: .9rem;
+    text-align: center;
+}
+footer a { color: #ff7a45; text-decoration: none; }
+footer a:hover, footer a:focus-visible { color: #ffa36e; outline: none; }
+
+/* ---- Blog ---- */
+.post-list { list-style: none; }
+.post-item {
+    display: block;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 110, 60, 0.28);
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+    transition: border-color .3s, transform .3s;
+}
+.post-item:hover, .post-item:focus-visible { border-color: rgba(255, 110, 60, 0.4); transform: translateY(-2px); outline: none; }
+.post-item h3 { font-weight: 400; font-size: 1.35rem; color: #fff; margin-bottom: 4px; }
+.post-date { color: #ff7a45; font-size: .9rem; font-style: italic; }
+.post-summary { color: #a8a8a8; margin-top: 8px; }
+
+.prose { max-width: 720px; margin: 0 auto; background: rgba(0, 0, 0, 0.85); padding: 36px 38px; border-radius: 10px; border: 1px solid rgba(255, 110, 60, 0.1); backdrop-filter: blur(4px); }
+.prose h1 { font-size: 2.3rem; font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 6px; }
+.prose h2 { font-size: 1.5rem; font-weight: 400; color: #fff; margin: 38px 0 12px; }
+.prose h3 { font-size: 1.2rem; font-weight: 700; color: #dfe6f5; margin: 28px 0 8px; }
+.prose p, .prose li { font-size: 1.1rem; line-height: 1.8; color: #c4c8d2; }
+.prose p { margin: 14px 0; }
+.prose ul, .prose ol { margin: 14px 0 14px 26px; }
+.prose a { color: #ff7a45; }
+.prose blockquote { border-left: 3px solid #7a3a22; padding-left: 18px; color: #98a0b4; margin: 18px 0; font-style: italic; }
+.prose code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .9em; background: rgba(255, 122, 69, 0.1); padding: 1px 6px; border-radius: 4px; }
+.prose pre { background: #050505; border: 1px solid #2a1a14; border-radius: 8px; padding: 16px; overflow-x: auto; margin: 18px 0; }
+.prose pre code { background: none; padding: 0; }
+.prose mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; }
+.prose .post-date { margin-bottom: 20px; display: block; }
+
+@media (max-width: 768px) {
+    .latex-title { font-size: 1.8rem; }
+    .latex-author { font-size: 1.2rem; }
+    .section-title { font-size: 1.5rem; }
+    .prose { padding: 24px 20px; }
+    .prose h1 { font-size: 1.8rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}
+
+/* keep text over the flames readable */
+footer, .more-link, .tech-intro, .tech-hint { text-shadow: 0 0 6px #000, 0 0 12px #000; }

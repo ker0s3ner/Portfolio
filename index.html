@@ -4,1498 +4,505 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Benas Petronis</title>
+    <meta name="description" content="Benas Petronis: spectral theory, functional analysis, systems programming and security tooling.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate" type="application/atom+xml" title="Blog" href="blog/feed.xml">
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'none' }
         };
     </script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <link rel="stylesheet" href="assets/site.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman:wght@400;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        ::selection {
-            background: rgba(107, 158, 255, 0.3);
-            color: #fff;
-        }
-
-        html {
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        html::-webkit-scrollbar {
-            display: none;
-        }
-
-        body {
-            font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', serif;
-            background: #000;
-            color: #e0e0e0;
-            line-height: 1.6;
-            overflow-y: scroll;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        body::-webkit-scrollbar {
-            display: none;
-        }
-
-        #math-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            overflow: hidden;
-        }
-
-        .formula {
-            position: absolute;
-            color: rgba(100, 150, 255, 0.15);
-            pointer-events: none;
-            white-space: nowrap;
-            animation: fadeInOut 12s ease-in-out infinite;
-            font-size: 16px;
-            text-shadow: 0 0 8px rgba(100, 150, 255, 0.3);
-        }
-
-        @keyframes fadeInOut {
-            0% {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            20% {
-                opacity: 0.6;
-            }
-            80% {
-                opacity: 0.6;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-30px) scale(1.05);
-            }
-        }
-
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            margin-bottom: 60px;
-            padding-top: 40px;
-            text-align: center;
-        }
-
-        .latex-title {
-            font-size: 2.2rem;
-            font-weight: 400;
-            margin-bottom: 8px;
-            color: #999;
-            font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', serif;
-        }
-
-        .latex-title .content {
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .latex-author {
-            font-size: 1.4rem;
-            font-weight: 400;
-            margin-bottom: 8px;
-            color: #999;
-        }
-
-        .latex-author .content {
-            color: #e0e0e0;
-        }
-
-        .latex-date {
-            font-size: 1.1rem;
-            font-weight: 400;
-            margin-bottom: 40px;
-            color: #666;
-        }
-
-        .latex-date .content {
-            color: #888;
-            font-style: italic;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 400;
-            margin-bottom: 10px;
-            color: #fff;
-        }
-
-        .subtitle {
-            font-size: 1.1rem;
-            color: #888;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
-        .intro {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
-            color: #b0b0b0;
-            text-align: left;
-        }
-
-        .contact-links {
-            margin-top: 20px;
-            text-align: left;
-        }
-
-        .contact-links a {
-            color: #6b9eff;
-            text-decoration: none;
-            margin-right: 30px;
-            font-weight: 400;
-        }
-
-        .contact-links a:hover,
-        .contact-links a:focus {
-            color: #8bb4ff;
-            outline: none;
-        }
-
-        .contact-links a:focus-visible {
-            outline: 2px solid #6b9eff;
-            outline-offset: 2px;
-        }
-
-        .skip-link {
-            color: #6b9eff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-            display: inline-block;
-        }
-
-        .skip-link:hover,
-        .skip-link:focus {
-            color: #8bb4ff;
-            outline: none;
-        }
-
-        .skip-link:focus-visible {
-            outline: 2px solid #6b9eff;
-            outline-offset: 2px;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-            font-weight: 400;
-            margin: 80px 0 40px 0;
-            color: #fff;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
         .project {
-            margin-bottom: 80px;
-            background: rgba(20, 20, 30, 0.6);
+            margin-bottom: 36px;
+            background: rgba(0, 0, 0, 0.88);
             padding: 30px;
             border-radius: 8px;
-            border: 1px solid rgba(100, 150, 255, 0.1);
-            transition: border-color 0.3s;
+            border: 1px solid rgba(255, 110, 60, 0.28);
+            transition: border-color .3s, opacity .3s, transform .3s;
+            backdrop-filter: blur(3px);
         }
-
-        .project:hover {
-            border-color: rgba(100, 150, 255, 0.3);
-        }
-
-        .project:focus-within {
-            border-color: rgba(100, 150, 255, 0.4);
-            outline: none;
-        }
-
-        .project h3 {
-            font-size: 1.6rem;
-            font-weight: 400;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .project-meta {
-            color: #6b9eff;
-            font-size: 0.9rem;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        .project-description {
-            color: #b0b0b0;
-            line-height: 1.8;
-            margin-bottom: 20px;
-        }
-
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
+        .project:hover, .project:focus-within { border-color: rgba(255, 110, 60, 0.4); outline: none; }
+        .project h3 { font-size: 1.55rem; font-weight: 400; margin-bottom: 12px; color: #fff; }
+        .project-meta { color: #ff7a45; font-size: .9rem; margin-bottom: 18px; font-style: italic; }
+        .project-description { color: #b0b0b0; line-height: 1.8; margin-bottom: 16px; }
+        .project-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
         .tag {
-            background: rgba(107, 158, 255, 0.15);
-            color: #6b9eff;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(107, 158, 255, 0.2);
+            background: rgba(255, 122, 69, 0.15); color: #ff7a45;
+            padding: 5px 12px; border-radius: 4px; font-size: .85rem;
+            border: 1px solid rgba(255, 122, 69, 0.2);
         }
+        .project-links { margin-top: 18px; }
+        .project-links a { color: #ff7a45; text-decoration: none; margin-right: 20px; font-size: .95rem; }
+        .project-links a:hover, .project-links a:focus-visible { color: #ffa36e; outline: none; }
 
-        .tag:hover,
-        .tag:focus {
-            background: rgba(107, 158, 255, 0.25);
-            border-color: rgba(107, 158, 255, 0.4);
-            outline: none;
+        .project { transform-style: preserve-3d; will-change: transform; }
+        .project.tilting { transition: border-color .3s, opacity .3s, transform .08s linear; }
+        .project.is-dim { opacity: .28; }
+        .project.is-hit { border-color: rgba(255, 163, 110, 0.75); box-shadow: 0 0 0 1px rgba(255, 163, 110, .35), 0 0 36px rgba(255, 122, 69, .18); }
+
+        .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; margin-bottom: 36px; }
+        .mini-grid .project { margin: 0; padding: 22px; }
+        .mini-grid .project h3 { font-size: 1.25rem; margin-bottom: 8px; }
+        .mini-grid .project-description { font-size: .98rem; line-height: 1.65; }
+
+        /* Technologies */
+        .tech-intro { color: #b0b0b0; line-height: 1.8; font-size: 1.05rem; margin-bottom: 8px; }
+        .tech-hint { color: #aab2c4; font-size: .9rem; font-style: italic; margin-bottom: 26px; }
+        .tech-group { margin-bottom: 30px; }
+        .tech-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+        .tech {
+            font: inherit; cursor: pointer;
+            background: #000; color: #f0e6e0;
+            border: 1px solid #3a2a24; border-radius: 4px;
+            padding: 8px 14px; font-size: .95rem; transition: border-color .2s, color .2s;
+            display: inline-flex; align-items: baseline; gap: 8px;
         }
+        .tech small { color: #9aa3b8; font-size: .75rem; }
+        .tech:hover, .tech:focus-visible, .tech.is-on { border-color: #ff7a45; color: #fff; outline: none; }
 
-        .project-links {
-            margin-top: 20px;
-        }
-
-        .project-links a {
-            color: #6b9eff;
-            text-decoration: none;
-            margin-right: 20px;
-            font-size: 0.95rem;
-        }
-
-        .project-links a:hover,
-        .project-links a:focus {
-            color: #8bb4ff;
-            outline: none;
-        }
-
-        .project-links a:focus-visible {
-            outline: 2px solid #6b9eff;
-            outline-offset: 2px;
-        }
-
-        .technologies-section {
-            margin: 60px 0;
-            background: rgba(20, 20, 30, 0.6);
-            padding: 40px;
-            border-radius: 8px;
-            border: 1px solid rgba(100, 150, 255, 0.1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .tech-category {
-            margin-bottom: 50px;
-            position: relative;
-        }
-
-        .tech-category:last-child {
-            margin-bottom: 0;
-        }
-
-        .tech-category h3 {
-            color: #6b9eff;
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            font-weight: 400;
-            display: inline-block;
-            position: relative;
-            padding-left: 20px;
-        }
-
-        .tech-category h3::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 4px;
-            height: 70%;
-            background: linear-gradient(180deg, #6b9eff 0%, transparent 100%);
-            border-radius: 2px;
-        }
-
-        .tech-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-            position: relative;
-        }
-
-        .tech-item {
-            background: rgba(107, 158, 255, 0.05);
-            padding: 14px 22px;
-            border-radius: 25px;
-            color: #6b9eff;
-            font-size: 0.9rem;
-            border: 1px solid rgba(107, 158, 255, 0.15);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-            opacity: 0;
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-
-        .tech-category:nth-child(1) .tech-item:nth-child(1) { animation-delay: 0.05s; }
-        .tech-category:nth-child(1) .tech-item:nth-child(2) { animation-delay: 0.1s; }
-        .tech-category:nth-child(1) .tech-item:nth-child(3) { animation-delay: 0.15s; }
-        .tech-category:nth-child(1) .tech-item:nth-child(4) { animation-delay: 0.2s; }
-        
-        .tech-category:nth-child(2) .tech-item:nth-child(1) { animation-delay: 0.25s; }
-        .tech-category:nth-child(2) .tech-item:nth-child(2) { animation-delay: 0.3s; }
-        .tech-category:nth-child(2) .tech-item:nth-child(3) { animation-delay: 0.35s; }
-        .tech-category:nth-child(2) .tech-item:nth-child(4) { animation-delay: 0.4s; }
-        
-        .tech-category:nth-child(3) .tech-item:nth-child(1) { animation-delay: 0.45s; }
-        .tech-category:nth-child(3) .tech-item:nth-child(2) { animation-delay: 0.5s; }
-        .tech-category:nth-child(3) .tech-item:nth-child(3) { animation-delay: 0.55s; }
-        .tech-category:nth-child(3) .tech-item:nth-child(4) { animation-delay: 0.6s; }
-        .tech-category:nth-child(3) .tech-item:nth-child(5) { animation-delay: 0.65s; }
-        
-        .tech-category:nth-child(4) .tech-item:nth-child(1) { animation-delay: 0.7s; }
-        .tech-category:nth-child(4) .tech-item:nth-child(2) { animation-delay: 0.75s; }
-        .tech-category:nth-child(4) .tech-item:nth-child(3) { animation-delay: 0.8s; }
-        .tech-category:nth-child(4) .tech-item:nth-child(4) { animation-delay: 0.85s; }
-        .tech-category:nth-child(4) .tech-item:nth-child(5) { animation-delay: 0.9s; }
-        .tech-category:nth-child(4) .tech-item:nth-child(6) { animation-delay: 0.95s; }
-        
-        .tech-category:nth-child(5) .tech-item:nth-child(1) { animation-delay: 1.0s; }
-        .tech-category:nth-child(5) .tech-item:nth-child(2) { animation-delay: 1.05s; }
-        .tech-category:nth-child(5) .tech-item:nth-child(3) { animation-delay: 1.1s; }
-        
-        .tech-category:nth-child(6) .tech-item:nth-child(1) { animation-delay: 1.15s; }
-        .tech-category:nth-child(6) .tech-item:nth-child(2) { animation-delay: 1.2s; }
-        
-        .tech-category:nth-child(7) .tech-item:nth-child(1) { animation-delay: 1.25s; }
-        .tech-category:nth-child(7) .tech-item:nth-child(2) { animation-delay: 1.3s; }
-        .tech-category:nth-child(7) .tech-item:nth-child(3) { animation-delay: 1.35s; }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .tech-item::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(107, 158, 255, 0.3) 0%, transparent 70%);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease-out, height 0.6s ease-out;
-            z-index: 0;
-        }
-
-        .tech-item:hover::before {
-            width: 200px;
-            height: 200px;
-        }
-
-        .tech-item:hover {
-            background: rgba(107, 158, 255, 0.12);
-            border-color: rgba(107, 158, 255, 0.5);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 25px rgba(107, 158, 255, 0.2),
-                        0 0 0 1px rgba(107, 158, 255, 0.3);
-            z-index: 1;
-        }
-
-        .tech-item:focus-within {
-            outline: 2px solid #6b9eff;
-            outline-offset: 2px;
-        }
-
-        .tech-icon {
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        footer {
-            margin-top: 100px;
-            padding: 40px 0;
-            border-top: 1px solid #333;
-            color: #666;
-            font-size: 0.9rem;
-            text-align: center;
-        }
-
-        footer a {
-            color: #6b9eff;
-            text-decoration: none;
-        }
-
-        footer a:hover,
-        footer a:focus {
-            color: #8bb4ff;
-            outline: none;
-        }
-
-        footer a:focus-visible {
-            outline: 2px solid #6b9eff;
-            outline-offset: 2px;
-        }
+        /* Blog teaser */
+        .blog-teaser .post-item { margin-bottom: 14px; }
+        .blog-empty { color: #8a93a8; font-style: italic; }
+        .more-link { display: inline-block; margin-top: 6px; }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .section-title {
-                font-size: 1.5rem;
-            }
-            
-            .project h3 {
-                font-size: 1.3rem;
-            }
-
-            .latex-title {
-                font-size: 1.8rem;
-            }
-
-            .latex-author {
-                font-size: 1.2rem;
-            }
+            .project h3 { font-size: 1.3rem; }
+            .project { padding: 22px; }
         }
-
-        @media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-
-            .formula {
-                display: none;
-            }
-
-            .tech-item {
-                opacity: 1 !important;
-                animation: none !important;
-            }
-        }
+        @media (prefers-reduced-motion: reduce) { .project, .tech { transition: none; } }
     </style>
 </head>
 <body>
-    <div id="math-background" aria-hidden="true"></div>
-    
+    <div id="spectral-bg" aria-hidden="true"></div>
+
     <div class="container">
         <header role="banner">
-            <div class="latex-title">
-                \title{<span class="content">Portfolio Website</span>}
-            </div>
-            <div class="latex-author">
-                \author{<span class="content">Benas Petronis</span>}
-            </div>
-            <div class="latex-date">
-                \date{<span class="content" id="current-date"></span>}
-            </div>
-            
+            <div class="latex-title">\title{<span class="content">Portfolio Website</span>}</div>
+            <div class="latex-author">\author{<span class="content">Benas Petronis</span>}</div>
+            <div class="latex-date">\date{<span class="content" id="current-date"></span>}</div>
 
-            
             <p class="subtitle">Self-Taught Maths Student | High School Student | Full-Stack Developer</p>
-            
+
             <p class="intro">
-                I'm a high school student based in Lithuania with a deep love for pure mathematics, particularly algebraic topology, 
-                category theory, and number theory. I teach myself advanced mathematical concepts and combine this 
-                theoretical knowledge with practical programming skills to build computational tools and applications 
-                across various domains—from mathematical computation to cybersecurity.
+                I'm a high school student based in Lithuania with a deep love for pure mathematics, particularly spectral theory,
+                functional analysis, and the operator-theoretic view of geometry. I teach myself advanced mathematics and pair it
+                with practical programming to build computational tools across domains, from mathematical computation to
+                cybersecurity.
             </p>
-            
             <p class="intro">
                 Interested in mathematics, theoretical computer science, or collaborative projects? Let's connect.
             </p>
-            
+
             <div class="contact-links">
-                <a href="https://github.com/Bencode12">github: @Bencode12</a>
-                <span style="color: #6b9eff;">email: benjaminas (dot) petronis [at] gmail (dot) com</span>
+                <a href="https://github.com/ker0s3ner" target="_blank" rel="noopener noreferrer">github: @ker0s3ner</a>
+                <a href="https://www.linkedin.com/in/benaspetronis/" target="_blank" rel="noopener noreferrer">linkedin: benaspetronis</a>
+                <span>email: benjaminas (dot) petronis [at] gmail (dot) com</span>
             </div>
         </header>
 
         <main id="main-content" role="main">
-            <h2 class="section-title" id="research">Projects & Research</h2>
 
-        <div class="project">
-            <h3>Marila Programming Language</h3>
-            <p class="project-meta">domain-specific language • mathematical visualization</p>
-            
-            <p class="project-description">
-                A Python-backed domain-specific language for creating mathematical documents, Manim-style motion graphics,
-                and TikZ-style Euclidean vector diagrams. Marila provides dedicated document, video, and image file types,
-                with a command-line workflow for checking syntax and rendering source files to HTML or SVG.
+            <h2 class="section-title" id="research"><span class="tex">\section{</span>Projects &amp; Research<span class="tex">}</span></h2>
+
+            <h3 class="subsection-title"><span class="tex">\subsection{</span>Research &amp; Proofs<span class="tex">}</span></h3>
+
+            <div class="project" data-tech="latex spectral functional-analysis hilbert">
+                <h3>The Spectral Theorem: Foundations, Applications, Modern Perspective</h3>
+                <p class="project-meta">mathematical monograph • functional analysis</p>
+                <p class="project-description">
+                    An 11-page mathematical monograph that builds a compact route to the spectral theorem. It begins with
+                    inner-product spaces, induced norms, orthogonality, projections, completeness, and Hilbert spaces, then
+                    develops orthonormal bases and Fourier series before introducing adjoints, self-adjoint operators,
+                    eigenvalue decompositions, and spectral theory in finite and infinite dimensions. The manuscript closes
+                    with the projection-valued-measure form of the theorem, connecting the elementary and operator-theoretic
+                    viewpoints.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">functional analysis</span>
+                    <span class="tag">Hilbert spaces</span>
+                    <span class="tag">spectral theory</span>
+                    <span class="tag">operator theory</span>
+                    <span class="tag">Fourier analysis</span>
+                </div>
+                <div class="project-links">
+                    <a href="Book.pdf" target="_blank" rel="noopener noreferrer">[Read Book (PDF)]</a>
+                    <a href="book.html">[View Description]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="latex diffgeo">
+                <h3>On the Differential Geometry of Ideal Rocket Trajectories</h3>
+                <p class="project-meta">original research • differential geometry • optimal control</p>
+                <p class="project-description">
+                    A foundational differential-geometric treatment of ideal rocket trajectories under vacuum operation.
+                    Constructed the rocket phase manifold $(M,g)$, a Riemannian 2-manifold where the Tsiolkovsky delta-v
+                    relation emerges as a geodesic arc-length formula. Proved eight main theorems including: the Arc-Length
+                    Theorem identifying $\Delta v$ with $L_g(\gamma)$, the Geodesic Theorem characterizing constant-thrust
+                    burns as unique geodesics, the Flatness Theorem proving $R \equiv 0$ and deriving global isometry with
+                    Euclidean $\mathbb{R}^2$, and the Conjugate-Point Theorem establishing global optimality. Extended results
+                    to Hamiltonian mechanics on the cotangent bundle, symplectic reduction, and multi-stage rocket optimization
+                    via fiber-bundle splicing. Complete with rigorous proofs and numerical validation across multiple propellant
+                    systems.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">differential geometry</span>
+                    <span class="tag">Riemannian manifolds</span>
+                    <span class="tag">optimal control</span>
+                    <span class="tag">aerospace</span>
+                    <span class="tag">Hamiltonian mechanics</span>
+                </div>
+                <div class="project-links">
+                    <a href="Differential%20trajectories.pdf" target="_blank" rel="noopener noreferrer">[Read Full Paper (PDF)]</a>
+                    <a href="rocket-geometry.html">[View Description]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="latex linear-algebra">
+                <h3>Determinant Congruence for Sum-Entry Matrices</h3>
+                <p class="project-meta">linear algebra</p>
+                <p class="project-description">
+                    Proved that for any $n \times n$ matrix $A$ with entries $A_{ij} = i + j$, the determinant satisfies
+                    $\det(A) \equiv 0 \pmod{n}$ for all $n \geq 3$, and in fact $\det(A) = 0$ exactly. The proof demonstrates
+                    that all columns of $A$ lie in the span of two vectors $u = (1,1,\ldots,1)^T$ and $v = (1,2,\ldots,n)^T$,
+                    establishing linear dependence when $n \geq 3$. Verified the result through row operations on small cases
+                    and generalized using vector space dimension arguments. Includes explicit computations for $n=1,2$ edge
+                    cases where the determinant is non-zero.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">linear algebra</span>
+                    <span class="tag">matrix theory</span>
+                    <span class="tag">number theory</span>
+                    <span class="tag">proof techniques</span>
+                </div>
+                <div class="project-links">
+                    <a href="determinant%20proof.pdf" target="_blank" rel="noopener noreferrer">[Read Full Proof (PDF)]</a>
+                    <a href="matrix-proof.html">[View Description]</a>
+                </div>
+            </div>
+
+            <h3 class="subsection-title"><span class="tex">\subsection{</span>Software<span class="tex">}</span></h3>
+
+            <div class="project" data-tech="cpp python manim">
+                <h3>Marila Programming Language</h3>
+                <p class="project-meta">domain-specific language • mathematical visualization</p>
+                <p class="project-description">
+                    A domain-specific language for creating mathematical documents, Manim-style motion graphics,
+                    and TikZ-style Euclidean vector diagrams. Marila provides dedicated document, video, and image file types,
+                    with a command-line workflow for checking syntax and rendering source files to HTML or SVG.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">domain-specific language</span>
+                    <span class="tag">C++</span>
+                    <span class="tag">mathematical documents</span>
+                    <span class="tag">animation</span>
+                    <span class="tag">vector geometry</span>
+                </div>
+                <div class="project-links">
+                    <a href="custom-language.html">[View Project Page]</a>
+                    <a href="https://github.com/ker0s3ner/Marila" target="_blank" rel="noopener noreferrer" aria-label="Marila on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="python chemistry">
+                <h3>Catalyst: Chemistry Terminal Tool</h3>
+                <p class="project-meta">computational chemistry</p>
+                <p class="project-description">
+                    A focused Python terminal interface for chemistry calculations, practice, and exploration. Catalyst combines
+                    fast keyboard navigation with a growing calculation catalog covering stoichiometry, ideal gases, dilution,
+                    thermodynamics, kinetics, electrochemistry, and radioactive decay, while keeping future chemistry modules
+                    organized behind dedicated workspaces.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">chemistry</span>
+                    <span class="tag">stoichiometry</span>
+                    <span class="tag">thermodynamics</span>
+                    <span class="tag">python</span>
+                    <span class="tag">terminal</span>
+                </div>
+                <div class="project-links">
+                    <a href="chemistry-tool.html">[View Project Page]</a>
+                    <a href="https://github.com/ker0s3ner/catalyst" target="_blank" rel="noopener noreferrer" aria-label="Catalyst on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="python security">
+                <h3>Kaput: Penetration Testing Terminal</h3>
+                <p class="project-meta">cybersecurity • authorized assessment</p>
+                <p class="project-description">
+                    A menu-driven Python terminal toolkit that organizes authorized security assessment workflows into a modular
+                    command-line interface: reconnaissance, network scanning and enumeration, web testing, OSINT, fuzzing, and
+                    cryptography utilities in one application. Modules are at different stages of maturity, and the README says
+                    so plainly.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">cybersecurity</span>
+                    <span class="tag">penetration testing</span>
+                    <span class="tag">python</span>
+                    <span class="tag">network security</span>
+                    <span class="tag">OSINT</span>
+                </div>
+                <div class="project-links">
+                    <a href="pentesting.html">[View Project Page]</a>
+                    <a href="https://github.com/ker0s3ner/Kaput" target="_blank" rel="noopener noreferrer" aria-label="Kaput on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="c python shell linux security wireguard luks">
+                <h3>Bastille</h3>
+                <p class="project-meta">systems security • privacy-hardened Linux</p>
+                <p class="project-description">
+                    A privacy-hardened desktop Linux live system, a spiritual successor to the 2002 Shmoo Group Tinfoil Hat Linux,
+                    rebuilt for modern threat models. Boots from USB, runs in RAM, and leaves nothing on the host machine.
+                    Features a WireGuard kill-switch with nftables, LUKS2 Argon2id split-key encryption, a three-PIN duress system
+                    (normal / decoy / full-wipe), USB forensic tool detection (Cellebrite, MSAB, Qualcomm EDL), BadUSB blocking,
+                    Intel ME stripping via me_cleaner, OpenCV face detection for automatic screen lock, i2pd I2P routing inside the
+                    WireGuard tunnel, and key material secured with sodium_malloc + mlock. Sway/Wayland compositor; Debian base.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Python</span>
+                    <span class="tag">C</span>
+                    <span class="tag">linux</span>
+                    <span class="tag">cryptography</span>
+                    <span class="tag">privacy</span>
+                    <span class="tag">WireGuard</span>
+                    <span class="tag">LUKS2</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/ker0s3ner/bastille" target="_blank" rel="noopener noreferrer" aria-label="Bastille on GitHub (opens in new tab)">[View on GitHub]</a>
+                    <a href="https://ker0s3ner.github.io/bastille/" target="_blank" rel="noopener noreferrer" aria-label="Bastille project site (opens in new tab)">[Project Site]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="rust typescript react tauri">
+                <h3>Holdshort</h3>
+                <p class="project-meta">simulation • aviation • systems programming</p>
+                <p class="project-description">
+                    A ground-operations and terminal-airspace ATC simulator built with Tauri (Rust core + React/TypeScript frontend).
+                    Uses real-world taxiway, runway, and gate geometry pulled from OpenStreetMap with A* taxi routing and a full
+                    ramp/ground/tower clearance state machine. Three displays: Surface Movement Radar, a Tower Cab view over
+                    satellite imagery, and an Approach radar scope with range rings and datablocks. Approach arrivals are vectored
+                    in from a spawn point on final rather than teleported. Every unworked position runs on its own AI timer so a
+                    single-position session still produces complete moving traffic. Ships with 12 bundled airports including KJFK,
+                    KATL, EGLL, RJTT, and EDDF.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Rust</span>
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">Tauri</span>
+                    <span class="tag">React</span>
+                    <span class="tag">simulation</span>
+                    <span class="tag">OpenStreetMap</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/ker0s3ner/holdshort" target="_blank" rel="noopener noreferrer" aria-label="Holdshort on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="javascript cesium vite">
+                <h3>Panorama</h3>
+                <p class="project-meta">geospatial visualization • live data • voice control</p>
+                <p class="project-description">
+                    A browser-based 3D globe that puts aircraft, ships, satellites, earthquakes, weather and public cameras on one
+                    explorable planet, with a cockpit view that rides along inside a tracked flight and hands-free voice control.
+                    Vanilla JavaScript on CesiumJS and Vite with Google Photorealistic 3D Tiles; every data layer is its own module.
+                    Built on the open-source God's Eye View project, with the original MIT license and credits preserved.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">JavaScript</span>
+                    <span class="tag">CesiumJS</span>
+                    <span class="tag">Vite</span>
+                    <span class="tag">3D globe</span>
+                    <span class="tag">real-time data</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/ker0s3ner/Panorama" target="_blank" rel="noopener noreferrer" aria-label="Panorama on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="typescript editor">
+                <h3>Lara</h3>
+                <p class="project-meta">developer tools • editor • early stage</p>
+                <p class="project-description">
+                    A minimal, keyboard-first code editor forked from VS Code (Code - OSS), aiming to feel like LazyVim inside a
+                    full graphical editor: a leader-key command menu, fuzzy find and live grep, a quiet statusline and better
+                    debugging, shipped without telemetry or built-in AI. Currently a clean fork that builds; the rebrand and UI
+                    roadmap is what's next.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">VS Code fork</span>
+                    <span class="tag">developer tools</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/ker0s3ner/Lara" target="_blank" rel="noopener noreferrer" aria-label="Lara on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="kotlin">
+                <h3>Kalimba</h3>
+                <p class="project-meta">game utilities • Kotlin</p>
+                <p class="project-description">
+                    A Kotlin Minecraft client with a configurable HUD, module system, theming, and a dedicated in-game control surface inspired by modern competitive clients.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">Kotlin</span>
+                    <span class="tag">Minecraft</span>
+                    <span class="tag">game client</span>
+                </div>
+                <div class="project-links">
+                    <a href="kalimba.html">[View Project Page]</a>
+                    <a href="https://github.com/ker0s3ner/Kalimba" target="_blank" rel="noopener noreferrer" aria-label="Kalimba on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <div class="project" data-tech="typescript opencv">
+                <h3>FaceLab</h3>
+                <p class="project-meta">computer vision • TypeScript</p>
+                <p class="project-description">
+                    A TypeScript computer-vision workspace for face detection experiments, landmark overlays, and privacy-conscious local image processing.
+                </p>
+                <div class="project-tags">
+                    <span class="tag">TypeScript</span>
+                    <span class="tag">computer vision</span>
+                    <span class="tag">face detection</span>
+                </div>
+                <div class="project-links">
+                    <a href="facelab.html">[View Project Page]</a>
+                    <a href="https://github.com/ker0s3ner/FaceLab" target="_blank" rel="noopener noreferrer" aria-label="FaceLab on GitHub (opens in new tab)">[View on GitHub]</a>
+                </div>
+            </div>
+
+            <h3 class="subsection-title"><span class="tex">\subsection{</span>Tooling &amp; Notes<span class="tex">}</span></h3>
+
+            <div class="mini-grid">
+                <div class="project" data-tech="lua neovim shell">
+                    <h3>Nvil</h3>
+                    <p class="project-meta">Neovim configuration • Lua</p>
+                    <p class="project-description">A lazy.nvim-based Neovim setup: Telescope, Treesitter, LSP via Mason, format-on-save, and a local-model AI sidebar.</p>
+                    <div class="project-links"><a href="https://github.com/ker0s3ner/Nvil" target="_blank" rel="noopener noreferrer" aria-label="Nvil on GitHub (opens in new tab)">[View on GitHub]</a></div>
+                </div>
+                <div class="project" data-tech="shell tmux ghostty">
+                    <h3>Terminal-Config</h3>
+                    <p class="project-meta">macOS terminal • shell</p>
+                    <p class="project-description">A monochrome Ghostty + tmux + btop + fastfetch setup that builds a persistent three-pane session on launch.</p>
+                    <div class="project-links"><a href="https://github.com/ker0s3ner/Terminal-Config" target="_blank" rel="noopener noreferrer" aria-label="Terminal-Config on GitHub (opens in new tab)">[View on GitHub]</a></div>
+                </div>
+            </div>
+
+            <h2 class="section-title" id="technologies"><span class="tex">\section{</span>Technologies<span class="tex">}</span></h2>
+
+            <p class="tech-intro">
+                Languages I've shipped real projects in, not a wish list.
             </p>
-            
-            <div class="project-tags">
-                <span class="tag">domain-specific language</span>
-                <span class="tag">python</span>
-                <span class="tag">mathematical documents</span>
-                <span class="tag">animation</span>
-                <span class="tag">vector geometry</span>
-            </div>
-            
-            <div class="project-links">
-                <a href="custom-language.html" aria-label="View Marila Programming Language project details">[View Project Page]</a>
-                <a href="https://github.com/ker0s3ner/Marila" target="_blank" rel="noopener noreferrer" aria-label="View Marila Programming Language on GitHub (opens in new tab)">[View on GitHub]</a>
-            </div>
-        </div>
+            <p class="tech-hint">Hover or tap a language to light up the projects that use it.</p>
 
-
-        <div class="project">
-            <h3>Chemistry Terminal Tool</h3>
-            <p class="project-meta">computational chemistry</p>
-            
-            <p class="project-description">
-                A focused Python terminal interface for chemistry calculations, practice, and exploration. Catalyst combines
-                fast keyboard navigation with a growing calculation catalog covering stoichiometry, ideal gases, dilution,
-                thermodynamics, kinetics, electrochemistry, and radioactive decay, while keeping future chemistry modules
-                organized behind dedicated workspaces.
-            </p>
-            
-            <div class="project-tags">
-                <span class="tag">chemistry</span>
-                <span class="tag">stoichiometry</span>
-                <span class="tag">thermodynamics</span>
-                <span class="tag">python</span>
-                <span class="tag">terminal</span>
-            </div>
-            
-            <div class="project-links">
-                <a href="chemistry-tool.html" aria-label="View Catalyst Chemistry Terminal project details">[View Project Page]</a>
-                <a href="https://github.com/ker0s3ner/catalyst" target="_blank" rel="noopener noreferrer" aria-label="View Catalyst Chemistry Terminal on GitHub (opens in new tab)">[View on GitHub]</a>
-            </div>
-        </div>
-
-        <div class="project">
-            <h3>Penetration Testing Terminal</h3>
-            <p class="project-meta">cybersecurity</p>
-
-            <p class="project-description">
-                A Python-based penetration-testing terminal that organizes authorized security assessment workflows into a
-                modular command-line toolkit. The project brings together reconnaissance, network and vulnerability testing,
-                and security-audit utilities in one terminal-oriented interface.
-            </p>
-
-            <div class="project-tags">
-                <span class="tag">cybersecurity</span>
-                <span class="tag">penetration testing</span>
-                <span class="tag">python</span>
-                <span class="tag">network security</span>
-                <span class="tag">security automation</span>
+            <div class="tech-group">
+                <div class="tech-grid">
+                    <button class="tech" data-key="python">Python <small>Bastille · Kaput · Catalyst</small></button>
+                    <button class="tech" data-key="typescript">TypeScript <small>Holdshort · FaceLab · Lara</small></button>
+                    <button class="tech" data-key="rust">Rust <small>Holdshort</small></button>
+                    <button class="tech" data-key="cpp">C++ <small>Marila</small></button>
+                    <button class="tech" data-key="c">C <small>Bastille</small></button>
+                    <button class="tech" data-key="kotlin">Kotlin <small>Kalimba</small></button>
+                    <button class="tech" data-key="javascript">JavaScript <small>Panorama</small></button>
+                    <button class="tech" data-key="lua">Lua <small>Nvil</small></button>
+                    <button class="tech" data-key="shell">Shell <small>Bastille · Terminal-Config</small></button>
+                    <button class="tech" data-key="latex">LaTeX <small>papers &amp; book</small></button>
+                </div>
             </div>
 
-            <div class="project-links">
-                <a href="pentesting.html" aria-label="View Penetration Testing Terminal project details">[View Project Page]</a>
-                <a href="https://github.com/ker0s3ner/Term" target="_blank" rel="noopener noreferrer" aria-label="View Penetration Testing Terminal on GitHub (opens in new tab)">[View on GitHub]</a>
+            <h2 class="section-title" id="blog"><span class="tex">\section{</span>Blog<span class="tex">}</span></h2>
+            <div class="blog-teaser" id="blog-teaser">
+                <p class="blog-empty">Notes on spectral theory and the things I build, roughly once a month.</p>
             </div>
-        </div>
-
-        <div class="project">
-            <h3>Bastille</h3>
-            <p class="project-meta">systems security • privacy-hardened Linux</p>
-
-            <p class="project-description">
-                A privacy-hardened desktop Linux live system — a spiritual successor to the 2002 Shmoo Group Tinfoil Hat Linux,
-                rebuilt for modern threat models. Boots entirely from USB, runs in RAM, and leaves nothing on the host machine.
-                Features a WireGuard kill-switch with nftables, LUKS2 Argon2id split-key encryption, a three-PIN duress system
-                (normal / decoy / full-wipe), USB forensic tool detection (Cellebrite, MSAB, Qualcomm EDL), BadUSB blocking,
-                Intel ME stripping via me_cleaner, OpenCV face detection for automatic screen lock, i2pd I2P routing inside the
-                WireGuard tunnel, and key material secured with sodium_malloc + mlock. Sway/Wayland compositor; Debian base.
-            </p>
-
-            <div class="project-tags">
-                <span class="tag">C</span>
-                <span class="tag">linux</span>
-                <span class="tag">security</span>
-                <span class="tag">cryptography</span>
-                <span class="tag">privacy</span>
-                <span class="tag">WireGuard</span>
-                <span class="tag">LUKS2</span>
-            </div>
-
-            <div class="project-links">
-                <a href="https://github.com/ker0s3ner/bastille" target="_blank" rel="noopener noreferrer" aria-label="View Bastille on GitHub (opens in new tab)">[View on GitHub]</a>
-                <a href="https://ker0s3ner.github.io/bastille/" target="_blank" rel="noopener noreferrer" aria-label="View Bastille project site (opens in new tab)">[Project Site]</a>
-            </div>
-        </div>
-
-        <div class="project">
-            <h3>Holdshort</h3>
-            <p class="project-meta">simulation • aviation • systems programming</p>
-
-            <p class="project-description">
-                A ground-operations and terminal-airspace ATC simulator built with Tauri (Rust core + React/TypeScript frontend).
-                Uses real-world taxiway, runway, and gate geometry pulled from OpenStreetMap with A* taxi routing and a full
-                ramp/ground/tower clearance state machine. Three displays: Surface Movement Radar, a Tower Cab view over
-                satellite imagery, and an Approach radar scope with range rings and datablocks. Approach arrivals are vectored
-                in from a spawn point on final rather than teleported. Every unworked position runs on its own AI timer so a
-                single-position session still produces complete moving traffic. Ships with 12 bundled airports including KJFK,
-                KATL, EGLL, RJTT, and EDDF.
-            </p>
-
-            <div class="project-tags">
-                <span class="tag">Rust</span>
-                <span class="tag">TypeScript</span>
-                <span class="tag">Tauri</span>
-                <span class="tag">React</span>
-                <span class="tag">simulation</span>
-                <span class="tag">aviation</span>
-                <span class="tag">OpenStreetMap</span>
-            </div>
-
-            <div class="project-links">
-                <a href="https://github.com/ker0s3ner/holdshort" target="_blank" rel="noopener noreferrer" aria-label="View Holdshort on GitHub (opens in new tab)">[View on GitHub]</a>
-            </div>
-        </div>
-
-        <div class="project">
-            <h3>Kalimba</h3>
-            <p class="project-meta">game utilities • Kotlin</p>
-
-            <p class="project-description">
-                A Kotlin Minecraft client with a configurable HUD, module system, theming, and a dedicated in-game control surface inspired by modern competitive clients.
-            </p>
-
-            <div class="project-tags">
-                <span class="tag">Kotlin</span>
-                <span class="tag">Minecraft</span>
-                <span class="tag">game client</span>
-            </div>
-
-            <div class="project-links">
-                <a href="kalimba.html" aria-label="View Kalimba project details">[View Project Page]</a>
-                <a href="https://github.com/ker0s3ner/Kalimba" target="_blank" rel="noopener noreferrer" aria-label="View Kalimba on GitHub (opens in new tab)">[View on GitHub]</a>
-            </div>
-        </div>
-
-        <div class="project">
-            <h3>FaceLab</h3>
-            <p class="project-meta">computer vision • TypeScript</p>
-
-            <p class="project-description">
-                A TypeScript computer-vision workspace for face detection experiments, landmark overlays, and privacy-conscious local image processing.
-            </p>
-
-            <div class="project-tags">
-                <span class="tag">TypeScript</span>
-                <span class="tag">computer vision</span>
-                <span class="tag">face detection</span>
-            </div>
-
-            <div class="project-links">
-                <a href="facelab.html" aria-label="View FaceLab project details">[View Project Page]</a>
-                <a href="https://github.com/ker0s3ner/FaceLab" target="_blank" rel="noopener noreferrer" aria-label="View FaceLab on GitHub (opens in new tab)">[View on GitHub]</a>
-            </div>
-        </div>
-
-        <h2 class="section-title" style="display: none;">Mathematical Interests</h2>
-
-
-        <h2 class="section-title">Research & Proofs</h2>
-
-        <div class="project">
-            <h3>On the Differential Geometry of Ideal Rocket Trajectories</h3>
-            <p class="project-meta">original research • differential geometry • optimal control</p>
-            
-            <p class="project-description">
-                A foundational differential-geometric treatment of ideal rocket trajectories under vacuum operation. 
-                Constructed the rocket phase manifold $(M,g)$—a Riemannian 2-manifold where the Tsiolkovsky delta-v 
-                relation emerges as a geodesic arc-length formula. Proved eight main theorems including: the Arc-Length 
-                Theorem identifying $\Delta v$ with $L_g(\gamma)$, the Geodesic Theorem characterizing constant-thrust 
-                burns as unique geodesics, the Flatness Theorem proving $R \equiv 0$ and deriving global isometry with 
-                Euclidean $\mathbb{R}^2$, and the Conjugate-Point Theorem establishing global optimality. Extended results 
-                to Hamiltonian mechanics on the cotangent bundle, symplectic reduction, and multi-stage rocket optimization 
-                via fiber-bundle splicing. Complete with rigorous proofs and numerical validation across multiple propellant 
-                systems.
-            </p>
-            
-            <div class="project-tags">
-                <span class="tag">differential geometry</span>
-                <span class="tag">Riemannian manifolds</span>
-                <span class="tag">optimal control</span>
-                <span class="tag">aerospace</span>
-                <span class="tag">Hamiltonian mechanics</span>
-            </div>
-            
-            <div class="project-links">
-                <a href="Differential%20trajectories.pdf" target="_blank" rel="noopener noreferrer">[Read Full Paper (PDF)]</a>
-                <a href="rocket-geometry.html">[View Description]</a>
-            </div>
-        </div>
-
-        <div class="project">
-            <h3>Determinant Congruence for Sum-Entry Matrices</h3>
-            <p class="project-meta">linear algebra</p>
-            
-            <p class="project-description">
-                Proved that for any $n \times n$ matrix $A$ with entries $A_{ij} = i + j$, the determinant satisfies 
-                $\det(A) \equiv 0 \pmod{n}$ for all $n \geq 3$, and in fact $\det(A) = 0$ exactly. The proof demonstrates 
-                that all columns of $A$ lie in the span of two vectors $u = (1,1,\ldots,1)^T$ and $v = (1,2,\ldots,n)^T$, 
-                establishing linear dependence when $n \geq 3$. Verified the result through row operations on small cases 
-                and generalized using vector space dimension arguments. Includes explicit computations for $n=1,2$ edge 
-                cases where the determinant is non-zero.
-            </p>
-            
-            <div class="project-tags">
-                <span class="tag">linear algebra</span>
-                <span class="tag">matrix theory</span>
-                <span class="tag">number theory</span>
-                <span class="tag">proof techniques</span>
-            </div>
-            
-            <div class="project-links">
-                <a href="determinant%20proof.pdf" target="_blank" rel="noopener noreferrer">[Read Full Proof (PDF)]</a>
-                <a href="matrix-proof.html">[View Description]</a>
-            </div>
-        </div>
-
-        <div class="project">
-            <h3>The Spectral Theorem: Foundations, Applications, Modern Perspective</h3>
-            <p class="project-meta">mathematical monograph • functional analysis</p>
-
-            <p class="project-description">
-                An 11-page mathematical monograph that builds a compact route to the spectral theorem. It begins with
-                inner-product spaces, induced norms, orthogonality, projections, completeness, and Hilbert spaces, then
-                develops orthonormal bases and Fourier series before introducing adjoints, self-adjoint operators,
-                eigenvalue decompositions, and spectral theory in finite and infinite dimensions. The manuscript closes
-                with the projection-valued-measure form of the theorem, connecting the elementary and operator-theoretic
-                viewpoints.
-            </p>
-
-            <div class="project-tags">
-                <span class="tag">functional analysis</span>
-                <span class="tag">Hilbert spaces</span>
-                <span class="tag">spectral theory</span>
-                <span class="tag">operator theory</span>
-                <span class="tag">Fourier analysis</span>
-            </div>
-
-            <div class="project-links">
-                <a href="Book.pdf" target="_blank" rel="noopener noreferrer">[Read Book (PDF)]</a>
-                <a href="book.html">[View Description]</a>
-            </div>
-        </div>
-
-
-        <h2 class="section-title" id="technologies">Technologies and Languages</h2>
-
-        <div class="tech-showcase-container">
-            <p style="color: #b0b0b0; line-height: 1.8; margin-bottom: 40px; font-size: 1.05rem;">
-                Comprehensive technical proficiency across systems programming, web development, scientific computing, and specialized domains.
-            </p>
-
-            <!-- React Orbiting Circles -->
-            <div id="orbiting-tech-root"></div>
-        </div>
-
-        <style>
-            .tech-showcase-container {
-                margin: 60px 0;
-            }
-
-            /* Magic UI Orbiting Circles */
-            .orbiting-circles-container {
-                position: relative;
-                margin: 50px 0 60px 0;
-                padding: 80px 20px;
-                background: radial-gradient(ellipse at center, rgba(20, 20, 40, 0.6) 0%, rgba(10, 10, 15, 0.4) 70%);
-                border-radius: 20px;
-                border: 1px solid rgba(107, 158, 255, 0.15);
-                overflow: hidden;
-                min-height: 600px;
-            }
-
-            .orbiting-circles-wrapper {
-                position: relative;
-                width: 100%;
-                height: 500px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            /* Center Icon */
-            .center-icon {
-                position: absolute;
-                width: 70px;
-                height: 70px;
-                background: rgba(107, 158, 255, 0.1);
-                border: 1px solid rgba(107, 158, 255, 0.3);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: #6b9eff;
-                z-index: 10;
-            }
-
-            /* Orbit Rings */
-            .orbit-ring {
-                position: absolute;
-                border: 1px dashed rgba(107, 158, 255, 0.2);
-                border-radius: 50%;
-                animation: orbit-spin linear infinite;
-            }
-
-            .orbit-ring-1 {
-                width: 220px;
-                height: 220px;
-                animation-duration: 20s;
-            }
-
-            .orbit-ring-2 {
-                width: 320px;
-                height: 320px;
-                animation-duration: 30s;
-            }
-
-            .orbit-ring-3 {
-                width: 420px;
-                height: 420px;
-                animation-duration: 40s;
-            }
-
-            .orbit-ring-4 {
-                width: 520px;
-                height: 520px;
-                animation-duration: 50s;
-            }
-
-            @keyframes orbit-spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-
-            .orbiting-circles-wrapper:hover .orbit-ring {
-                animation-play-state: paused;
-            }
-
-            /* Orbit Items */
-            .orbit-item {
-                position: absolute;
-                width: 50px;
-                height: 50px;
-                background: rgba(107, 158, 255, 0.15);
-                border: 1px solid rgba(107, 158, 255, 0.3);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                backdrop-filter: blur(8px);
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                animation: orbit-counter-spin linear infinite;
-            }
-
-            .orbit-esoteric {
-                background: rgba(150, 100, 255, 0.15);
-                border-color: rgba(150, 100, 255, 0.3);
-            }
-
-            @keyframes orbit-counter-spin {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(-360deg); }
-            }
-
-            .orbit-ring-1 .orbit-item { animation-duration: 20s; }
-            .orbit-ring-2 .orbit-item { animation-duration: 30s; }
-            .orbit-ring-3 .orbit-item { animation-duration: 40s; }
-            .orbit-ring-4 .orbit-item { animation-duration: 50s; }
-
-            .orbit-item:hover {
-                background: rgba(107, 158, 255, 0.3);
-                border-color: rgba(107, 158, 255, 0.6);
-                transform: scale(1.15);
-                box-shadow: 0 0 25px rgba(107, 158, 255, 0.4);
-                z-index: 100;
-            }
-
-            .orbit-esoteric:hover {
-                background: rgba(150, 100, 255, 0.3);
-                border-color: rgba(150, 100, 255, 0.6);
-                box-shadow: 0 0 25px rgba(150, 100, 255, 0.4);
-            }
-
-            .orbit-item span {
-                color: #fff;
-                font-size: 0.7rem;
-                font-weight: 600;
-                text-align: center;
-            }
-
-            /* Position items evenly on orbits */
-            .orbit-ring-1 .orbit-item:nth-child(1) { top: -25px; left: calc(50% - 25px); }
-            .orbit-ring-1 .orbit-item:nth-child(2) { top: calc(50% - 25px); right: -25px; }
-            .orbit-ring-1 .orbit-item:nth-child(3) { bottom: -25px; left: calc(50% - 25px); }
-            .orbit-ring-1 .orbit-item:nth-child(4) { top: calc(50% - 25px); left: -25px; }
-
-            .orbit-ring-2 .orbit-item:nth-child(1) { top: -25px; left: calc(50% - 25px); }
-            .orbit-ring-2 .orbit-item:nth-child(2) { top: 15%; right: 6%; }
-            .orbit-ring-2 .orbit-item:nth-child(3) { bottom: 15%; right: 6%; }
-            .orbit-ring-2 .orbit-item:nth-child(4) { bottom: -25px; left: calc(50% - 25px); }
-            .orbit-ring-2 .orbit-item:nth-child(5) { top: 15%; left: 6%; }
-
-            .orbit-ring-3 .orbit-item:nth-child(1) { top: -25px; left: calc(50% - 25px); }
-            .orbit-ring-3 .orbit-item:nth-child(2) { top: 12%; right: 10%; }
-            .orbit-ring-3 .orbit-item:nth-child(3) { top: 50%; right: -25px; }
-            .orbit-ring-3 .orbit-item:nth-child(4) { bottom: 12%; right: 10%; }
-            .orbit-ring-3 .orbit-item:nth-child(5) { bottom: -25px; left: calc(50% - 25px); }
-            .orbit-ring-3 .orbit-item:nth-child(6) { top: 50%; left: -25px; }
-
-            .orbit-ring-4 .orbit-item:nth-child(1) { top: -25px; left: calc(50% - 25px); }
-            .orbit-ring-4 .orbit-item:nth-child(2) { top: 20%; right: 8%; }
-            .orbit-ring-4 .orbit-item:nth-child(3) { bottom: 20%; right: 8%; }
-            .orbit-ring-4 .orbit-item:nth-child(4) { bottom: -25px; left: calc(50% - 25px); }
-
-            .orbiting-caption {
-                position: absolute;
-                bottom: 20px;
-                left: 50%;
-                transform: translateX(-50%);
-                color: #b0b0b0;
-                font-size: 0.85rem;
-                text-align: center;
-                margin: 0;
-            }
-
-            /* React Orbiting Circles Demo */
-            #orbiting-tech-root {
-                position: relative;
-                width: 100%;
-                height: 600px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 50px 0 60px 0;
-            }
-
-            .orbiting-circles-demo {
-                position: relative;
-                width: 500px;
-                height: 500px;
-            }
-
-            .center-icon-large {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 70px;
-                height: 70px;
-                background: rgba(107, 158, 255, 0.15);
-                border: 1px solid rgba(107, 158, 255, 0.3);
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                backdrop-filter: blur(8px);
-                box-shadow: 0 0 40px rgba(107, 158, 255, 0.3);
-                z-index: 10;
-            }
-
-            .center-icon-large svg {
-                color: #6b9eff;
-            }
-
-            @keyframes orbit-rotate {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(360deg); }
-            }
-
-            @keyframes counter-rotate {
-                from { transform: rotate(0deg); }
-                to { transform: rotate(-360deg); }
-            }
-
-            .orbit-item {
-                cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .orbit-item:hover {
-                transform: scale(1.2) !important;
-                filter: brightness(1.3);
-            }
-
-            /* Bento Grid (existing styles) */
-            .tech-bento-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 20px;
-                margin-top: 40px;
-            }
-
-            .tech-card {
-                position: relative;
-                background: rgba(20, 20, 30, 0.6);
-                border: 1px solid rgba(107, 158, 255, 0.15);
-                border-radius: 16px;
-                padding: 28px;
-                overflow: hidden;
-                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .card-glow {
-                position: absolute;
-                top: -50%;
-                left: -50%;
-                width: 200%;
-                height: 200%;
-                background: radial-gradient(circle at center, rgba(107, 158, 255, 0.15) 0%, transparent 70%);
-                opacity: 0;
-                transition: opacity 0.4s ease-out;
-                pointer-events: none;
-            }
-
-            .tech-card:hover {
-                border-color: rgba(107, 158, 255, 0.4);
-                transform: translateY(-6px);
-                box-shadow: 0 20px 60px rgba(107, 158, 255, 0.2);
-            }
-
-            .tech-card:hover .card-glow {
-                opacity: 1;
-            }
-
-            .card-systems { grid-column: span 2; }
-            .card-web { grid-column: span 1; }
-            .card-science { grid-column: span 1; }
-            .card-apps { grid-column: span 2; }
-            .card-special { grid-column: span 3; }
-
-            .card-content {
-                position: relative;
-                z-index: 1;
-            }
-
-            .card-title {
-                color: #6b9eff;
-                font-size: 1.3rem;
-                font-weight: 700;
-                margin-bottom: 20px;
-                letter-spacing: 0.5px;
-            }
-
-            .tech-stack {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .stack-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-
-            .stack-name {
-                color: #e0e0e0;
-                font-size: 0.9rem;
-                font-weight: 500;
-                min-width: 100px;
-            }
-
-            .stack-bar {
-                flex: 1;
-                height: 6px;
-                background: rgba(107, 158, 255, 0.1);
-                border-radius: 3px;
-                overflow: hidden;
-            }
-
-            .stack-fill {
-                height: 100%;
-                background: linear-gradient(90deg, #6b9eff 0%, #8bb4ff 100%);
-                border-radius: 3px;
-                transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-            }
-
-            .tech-card:hover .stack-fill {
-                filter: brightness(1.2);
-            }
-
-            .tech-grid-mini {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .mini-tech {
-                background: rgba(107, 158, 255, 0.1);
-                border: 1px solid rgba(107, 158, 255, 0.2);
-                border-radius: 8px;
-                padding: 10px 16px;
-                color: #6b9eff;
-                font-size: 0.9rem;
-                font-weight: 500;
-                transition: all 0.3s ease-out;
-            }
-
-            .mini-tech:hover {
-                background: rgba(107, 158, 255, 0.2);
-                border-color: rgba(107, 158, 255, 0.5);
-                transform: scale(1.05);
-            }
-
-            .special-tags {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-            }
-
-            .special-tag {
-                background: rgba(107, 158, 255, 0.1);
-                border: 1px solid rgba(107, 158, 255, 0.2);
-                border-radius: 20px;
-                padding: 8px 16px;
-                color: #6b9eff;
-                font-size: 0.85rem;
-                font-weight: 500;
-                transition: all 0.3s ease-out;
-            }
-
-            .special-tag.esoteric {
-                background: rgba(150, 100, 255, 0.1);
-                border-color: rgba(150, 100, 255, 0.3);
-                color: #a78bfa;
-            }
-
-            .special-tag.meme {
-                background: rgba(255, 100, 150, 0.1);
-                border-color: rgba(255, 100, 150, 0.3);
-                color: #ff6b9d;
-            }
-
-            .special-tag:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(107, 158, 255, 0.3);
-            }
-
-            /* Responsive */
-            @media (max-width: 1024px) {
-                .solar-system {
-                    height: 400px;
-                }
-
-                .orbit-1 { width: 220px; height: 220px; }
-                .orbit-2 { width: 300px; height: 300px; }
-                .orbit-3 { width: 380px; height: 380px; }
-                .orbit-4 { width: 460px; height: 460px; }
-
-                .tech-bento-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
-
-                .card-systems,
-                .card-apps,
-                .card-special {
-                    grid-column: span 2;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .solar-system {
-                    height: 350px;
-                }
-
-                .sun {
-                    width: 90px;
-                    height: 90px;
-                }
-
-                .sun-label {
-                    font-size: 0.75rem;
-                }
-
-                .orbit-1 { width: 180px; height: 180px; }
-                .orbit-2 { width: 240px; height: 240px; }
-                .orbit-3 { width: 300px; height: 300px; }
-                .orbit-4 { width: 360px; height: 360px; }
-
-                .planet {
-                    width: 50px;
-                    height: 50px;
-                }
-
-                .planet-name {
-                    font-size: 0.65rem;
-                }
-
-                .tech-bento-grid {
-                    grid-template-columns: 1fr;
-                }
-
-                .card-systems,
-                .card-web,
-                .card-science,
-                .card-apps,
-                .card-special {
-                    grid-column: span 1;
-                }
-
-                .location-card {
-                    flex-direction: column;
-                    text-align: center;
-                    padding: 24px;
-                }
-            }
-
-            @media (prefers-reduced-motion: reduce) {
-                .orbit,
-                .planet,
-                .sun,
-                .tech-card,
-                .stack-fill,
-                .mini-tech,
-                .special-tag,
-                .location-card {
-                    transition: none !important;
-                    animation: none !important;
-                }
-            }
-        </style>
-
-        <script>
-            // Planet hover interaction
-            const planets = document.querySelectorAll('.planet');
-            const planetInfo = document.getElementById('planet-info');
-
-            planets.forEach(planet => {
-                planet.addEventListener('mouseenter', () => {
-                    const tech = planet.getAttribute('data-tech');
-                    const desc = planet.getAttribute('data-desc');
-                    
-                    planetInfo.innerHTML = `
-                        <h3 class="info-title">${tech}</h3>
-                        <p class="info-description">${desc}</p>
-                    `;
-                });
-
-                planet.addEventListener('mouseleave', () => {
-                    planetInfo.innerHTML = `
-                        <h3 class="info-title">Hover over a planet</h3>
-                        <p class="info-description">Explore the technology solar system</p>
-                    `;
-                });
-            });
-        </script>
+            <a class="plain more-link" href="blog/">All posts →</a> ·
+            <a class="plain more-link" href="blog/feed.xml">Atom feed</a>
         </main>
 
         <footer role="contentinfo">
             <p>
                 High School Student • Self-Taught Maths Student • Software Developer<br>
-                <a href="https://github.com/Bencode12" style="color: #6b9eff; text-decoration: none;">GitHub: @Bencode12</a> · 
-                <span style="color: #6b9eff;">email: benjaminas (dot) petronis [at] gmail (dot) com</span> · 
-                <a href="#" style="color: #6b9eff; text-decoration: none;">Back to top</a>
+                <a href="https://github.com/ker0s3ner" target="_blank" rel="noopener noreferrer">GitHub: @ker0s3ner</a> ·
+                <a href="https://www.linkedin.com/in/benaspetronis/" target="_blank" rel="noopener noreferrer">LinkedIn</a> ·
+                <span style="color: #ff7a45;">email: benjaminas (dot) petronis [at] gmail (dot) com</span> ·
+                <a href="#">Back to top</a>
             </p>
         </footer>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-            const today = new Date();
-            const dateStr = `${months[today.getMonth()]} ${today.getDate()}, ${today.getFullYear()}`;
-            document.getElementById('current-date').textContent = dateStr;
-        });
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            var d = new Date();
+            document.getElementById('current-date').textContent = months[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear();
 
-        // Pure mathematics formulas in LaTeX
-        const mathFormulas = [
-            // Algebraic Topology
-            "$H_n(X) = \\mathbb{Z}^{\\beta_n} \\oplus T_n$",
-            "$\\pi_1(S^1) \\cong \\mathbb{Z}$",
-            "$\\chi(X) = \\sum_{i} (-1)^i \\dim H_i(X)$",
-            "$\\partial \\circ \\partial = 0$",
-            "$H^*(X; \\mathbb{R}) \\cong \\Lambda(x_1,\\ldots,x_n)$",
-            "$f_* : \\pi_1(X,x_0) \\to \\pi_1(Y,f(x_0))$",
-            "$\\beta_n = \\text{rank}(H_n(X))$",
-            "$[S^n, S^n] \\cong \\mathbb{Z}$",
-            "$H_n(X \\times Y) \\cong \\bigoplus_{p+q=n} H_p(X) \\otimes H_q(Y)$",
-            
-            // Number Theory
-            "$\\zeta(s) = \\sum_{n=1}^{\\infty} \\frac{1}{n^s}$",
-            "$\\sum_{d|n} \\varphi(d) = n$",
-            "$p \\equiv 1 \\pmod{4} \\implies p = a^2 + b^2$",
-            "$L(s,\\chi) = \\sum_{n=1}^{\\infty} \\frac{\\chi(n)}{n^s}$",
-            "$a^{p-1} \\equiv 1 \\pmod{p}$",
-            "$\\#E(\\mathbb{F}_p) = p + 1 - a_p$",
-            "$\\left(\\frac{a}{p}\\right) \\equiv a^{\\frac{p-1}{2}} \\pmod{p}$",
-            "$\\prod_p \\frac{p}{p-1} = \\frac{\\zeta(s)}{\\zeta(s-1)}$",
-            "$\\pi(x) \\sim \\frac{x}{\\log x}$",
-            "$\\sum_{n \\leq x} \\mu(n) = o(x)$",
-            
-            // Abstract Algebra
-            "$G/N \\cong G' \\implies N = \\ker(\\varphi)$",
-            "$[G:H] = \\frac{|G|}{|H|}$",
-            "$\\langle g \\rangle \\leq G, \\text{ord}(g) \\mid |G|$",
-            "$R[x]/(p(x)) \\text{ is a field } \\iff p \\text{ irreducible}$",
-            "$\\text{Aut}(G) \\leq S_n$",
-            "$G \\times H / N \\times K \\cong (G/N) \\times (H/K)$",
-            "$\\text{Gal}(\\mathbb{Q}(\\sqrt{d})/\\mathbb{Q}) \\cong \\mathbb{Z}_2$",
-            "$|\\text{Gal}(K/F)| = [K:F]$",
-            
-            // Category Theory
-            "$\\text{Hom}(A \\otimes B, C) \\cong \\text{Hom}(A, \\text{Hom}(B,C))$",
-            "$F \\dashv G : \\mathcal{C} \\rightleftarrows \\mathcal{D}$",
-            "$\\text{colim } F \\cong \\lim G^{\\text{op}}$",
-            "$\\text{Nat}(F,G) : \\mathcal{C} \\to \\text{Set}$",
-            "$\\mathcal{C}^{\\text{op}} \\times \\mathcal{C} \\to \\text{Set}$",
-            "$\\text{Yoneda: } \\text{Nat}(h_A, F) \\cong F(A)$",
-            
-            // Differential Geometry
-            "$\\nabla_X Y - \\nabla_Y X = [X,Y]$",
-            "$R(X,Y)Z = \\nabla_X\\nabla_Y Z - \\nabla_Y\\nabla_X Z - \\nabla_{[X,Y]}Z$",
-            "$d\\omega = 0 \\implies \\omega = d\\eta \\text{ locally}$",
-            "$\\int_M d\\omega = \\int_{\\partial M} \\omega$",
-            "$\\text{Ric} = \\frac{1}{2}\\text{grad}(R)$",
-            "$\\nabla_X \\nabla_Y - \\nabla_{\\nabla_X Y} = R(X,Y)$",
-            
-            // Complex Analysis
-            "$\\oint_\\gamma f(z)dz = 2\\pi i \\sum \\text{Res}(f,z_k)$",
-            "$f'(z_0) = \\lim_{z \\to z_0} \\frac{f(z)-f(z_0)}{z-z_0}$",
-            "$\\bar{\\partial}f = 0 \\iff f \\text{ holomorphic}$",
-            "$|f(z)| \\leq M \\implies f \\text{ constant}$",
-            "$f(z) = \\sum_{n=0}^\\infty a_n(z-z_0)^n$",
-            
-            // Functional Analysis
-            "$\\langle Tx,y\\rangle = \\langle x,T^*y\\rangle$",
-            "$\\|T\\| = \\sup_{\\|x\\|=1} \\|Tx\\|$",
-            "$\\sigma(T) \\subseteq \\mathbb{C} \\text{ compact}$",
-            "$H = \\overline{\\text{span}\\{e_n\\}}$",
-            "$T = T^* \\implies \\sigma(T) \\subset \\mathbb{R}$",
-            
-            // Logic & Set Theory
-            "$2^{\\aleph_0} = \\mathfrak{c}$",
-            "$\\text{Con}(\\text{ZFC}) \\implies \\text{Con}(\\text{ZFC} + \\neg\\text{CH})$",
-            "$\\omega^\\omega = \\sup\\{\\omega^n : n < \\omega\\}$",
-            "$\\aleph_{\\alpha+1} = 2^{\\aleph_\\alpha}$",
-            "$V = L \\implies \\text{CH}$",
-            
-            // Homological Algebra
-            "$\\text{Ext}^n(M,N) = R^n \\text{Hom}(M,N)$",
-            "$\\text{Tor}_n(M,N) = L_n(M \\otimes N)$",
-            "$0 \\to A \\to B \\to C \\to 0 \\text{ exact}$",
-            "$H_n(C_\\bullet) = \\ker(\\partial_n)/\\text{im}(\\partial_{n+1})$",
-            "$\\text{Hom}(\\bigoplus A_i, B) \\cong \\prod \\text{Hom}(A_i, B)$",
-            
-            // Measure Theory
-            "$\\int_X f d\\mu = \\lim_{n\\to\\infty} \\int_X f_n d\\mu$",
-            "$\\mu(\\bigcup_{i=1}^\\infty E_i) = \\sum_{i=1}^\\infty \\mu(E_i)$",
-            "$L^p(X,\\mu) = \\{f : \\|f\\|_p < \\infty\\}$",
-            "$\\|f\\|_p = \\left(\\int |f|^p d\\mu\\right)^{1/p}$",
-            
-            // Representation Theory
-            "$\\chi_V(g) = \\text{tr}(\\rho(g))$",
-            "$V \\cong \\bigoplus_{\\lambda} V_\\lambda^{\\oplus m_\\lambda}$",
-            "$\\langle \\chi, \\psi \\rangle = \\frac{1}{|G|} \\sum_{g \\in G} \\chi(g)\\overline{\\psi(g)}$",
-            "$\\dim V = \\frac{1}{|G|} \\sum_{g \\in G} |\\chi_V(g)|^2$"
-        ];
-
-        const background = document.getElementById('math-background');
-        const maxFormulas = 30;
-        let activeFormulas = [];
-
-        function createFormula() {
-            if (activeFormulas.length >= maxFormulas) return;
-
-            const formula = document.createElement('div');
-            formula.className = 'formula';
-            const mathText = mathFormulas[Math.floor(Math.random() * mathFormulas.length)];
-            formula.innerHTML = mathText;
-            
-            // Random position
-            formula.style.left = Math.random() * 85 + '%';
-            formula.style.top = Math.random() * 85 + '%';
-            
-            // Random size
-            const fontSize = Math.random() * 10 + 14;
-            formula.style.fontSize = fontSize + 'px';
-            
-            // Random animation delay
-            formula.style.animationDelay = Math.random() * 4 + 's';
-            
-            // Random animation duration
-            formula.style.animationDuration = (Math.random() * 8 + 8) + 's';
-            
-            background.appendChild(formula);
-            
-            // Trigger MathJax to render this specific formula
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise([formula]).catch(() => {});
+            // Technology -> project highlighting
+            var projects = Array.prototype.slice.call(document.querySelectorAll('.project[data-tech]'));
+            var pinned = null;
+            function light(key) {
+                projects.forEach(function (p) {
+                    var hit = !!key && (' ' + p.dataset.tech + ' ').indexOf(' ' + key + ' ') !== -1;
+                    p.classList.toggle('is-hit', hit);
+                    p.classList.toggle('is-dim', !!key && !hit);
+                });
             }
-            
-            activeFormulas.push(formula);
-            
-            // Remove after animation completes
-            setTimeout(() => {
-                if (formula.parentNode) {
-                    formula.remove();
-                    activeFormulas = activeFormulas.filter(f => f !== formula);
-                }
-            }, parseFloat(formula.style.animationDuration) * 1000);
-        }
+            document.querySelectorAll('.tech').forEach(function (btn) {
+                btn.addEventListener('mouseenter', function () { if (!pinned) light(btn.dataset.key); });
+                btn.addEventListener('mouseleave', function () { if (!pinned) light(null); });
+                btn.addEventListener('focus', function () { if (!pinned) light(btn.dataset.key); });
+                btn.addEventListener('blur', function () { if (!pinned) light(null); });
+                btn.addEventListener('click', function () {
+                    var on = pinned === btn.dataset.key;
+                    document.querySelectorAll('.tech.is-on').forEach(function (b) { b.classList.remove('is-on'); });
+                    pinned = on ? null : btn.dataset.key;
+                    if (pinned) btn.classList.add('is-on');
+                    light(pinned);
+                });
+            });
 
-        // Wait for MathJax to load
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                // Create initial batch
-                for (let i = 0; i < maxFormulas; i++) {
-                    setTimeout(() => createFormula(), i * 300);
-                }
+            // Cards tilt toward the cursor (mouse/pen only, and not with reduced motion)
+            var MAX_TILT = 7;   // degrees
+            var canTilt = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+            if (canTilt) {
+                projects.forEach(function (card) {
+                    card.addEventListener('pointermove', function (e) {
+                        if (e.pointerType === 'touch') return;
+                        var r = card.getBoundingClientRect();
+                        var x = (e.clientX - r.left) / r.width - 0.5;
+                        var y = (e.clientY - r.top) / r.height - 0.5;
+                        card.classList.add('tilting');
+                        card.style.transform = 'perspective(1000px) rotateX(' + (-y * MAX_TILT * 2).toFixed(2) +
+                            'deg) rotateY(' + (x * MAX_TILT * 2).toFixed(2) + 'deg) scale3d(1.01,1.01,1.01)';
+                    });
+                    card.addEventListener('pointerleave', function () {
+                        card.classList.remove('tilting');
+                        card.style.transform = '';
+                    });
+                });
+            }
 
-                // Continuously add new formulas
-                setInterval(() => {
-                    if (activeFormulas.length < maxFormulas) {                        createFormula();
-                    }
-                }, 1500);
-            }, 500);
+            // Latest blog posts (generated by `npm run build` into blog/posts.json)
+            fetch('blog/posts.json').then(function (r) { return r.ok ? r.json() : []; }).then(function (posts) {
+                if (!posts.length) return;
+                var box = document.getElementById('blog-teaser');
+                box.textContent = '';
+                posts.slice(0, 3).forEach(function (p) {
+                    var a = document.createElement('a');
+                    a.className = 'post-item';
+                    a.href = 'blog/' + p.slug + '.html';
+                    var h = document.createElement('h3'); h.textContent = p.title;
+                    var dt = document.createElement('div'); dt.className = 'post-date'; dt.textContent = p.dateLabel;
+                    var s = document.createElement('p'); s.className = 'post-summary'; s.textContent = p.summary || '';
+                    a.appendChild(h); a.appendChild(dt); a.appendChild(s);
+                    box.appendChild(a);
+                });
+            }).catch(function () {});
         });
     </script>
-    
-    <!-- React Components -->
-    <script src="dist/orbiting-circles.js"></script>
+    <script src="assets/spectral-bg.js"></script>
 </body>
 </html>
