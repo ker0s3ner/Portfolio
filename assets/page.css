@@ -1,0 +1,91 @@
+/* Project / write-up pages. Loaded after site.css. */
+
+.container { padding-top: 32px; }
+
+.back-link {
+    color: #ff7a45;
+    text-decoration: none;
+    font-size: .95rem;
+    margin-bottom: 30px;
+    display: inline-block;
+}
+.back-link:hover, .back-link:focus-visible { color: #ffa36e; outline: none; }
+
+h1 { font-size: 2.5rem; font-weight: 400; color: #fff; margin-bottom: 10px; line-height: 1.2; }
+.meta { color: #ff7a45; font-size: 1rem; margin-bottom: 26px; font-style: italic; }
+
+.tags { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+.tag {
+    background: rgba(255, 122, 69, 0.12);
+    color: #ff7a45;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: .85rem;
+    border: 1px solid rgba(255, 122, 69, 0.25);
+}
+
+.content {
+    background: rgba(0, 0, 0, 0.88);
+    padding: 40px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 110, 60, 0.28);
+    margin-bottom: 30px;
+}
+.content h2 {
+    font-size: 1.7rem; font-weight: 400; color: #fff;
+    margin: 34px 0 18px; border-bottom: 1px solid #333; padding-bottom: 10px;
+}
+.content h2:first-child { margin-top: 0; }
+.content h3 { font-size: 1.3rem; font-weight: 400; color: #e8e2de; margin: 26px 0 14px; }
+
+/* LaTeX scaffolding on headings, matching the home page */
+.content h2::before { content: '\\section{'; color: #9aa3b8; font-size: .6em; margin-right: 2px; }
+.content h2::after  { content: '}';           color: #9aa3b8; font-size: .6em; }
+.content h3::before { content: '\\subsection{'; color: #9aa3b8; font-size: .65em; margin-right: 2px; }
+.content h3::after  { content: '}';              color: #9aa3b8; font-size: .65em; }
+
+.content p { color: #b8b8b8; line-height: 1.8; margin-bottom: 15px; }
+.content ul, .content ol { margin: 0 0 15px 30px; }
+.content li { color: #b8b8b8; margin-bottom: 10px; }
+.content strong { color: #e8e2de; }
+.content a { color: #ff7a45; }
+.content code { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .9em; background: rgba(255, 122, 69, 0.1); padding: 1px 6px; border-radius: 4px; }
+.content mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; }
+
+.highlight {
+    background: rgba(255, 122, 69, 0.08);
+    padding: 20px;
+    border-left: 3px solid #ff7a45;
+    margin: 20px 0;
+}
+.highlight p:last-child { margin-bottom: 0; }
+
+.warning {
+    background: rgba(255, 70, 70, 0.1);
+    padding: 20px;
+    border-left: 3px solid #ff5050;
+    margin: 20px 0;
+    color: #ffb0a8;
+}
+
+.results-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+.results-table th, .results-table td { padding: 12px; text-align: left; border-bottom: 1px solid #333; }
+.results-table th { color: #ff7a45; font-weight: 400; }
+.results-table td { color: #b8b8b8; }
+
+.links { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 30px; }
+.links a {
+    color: #ff7a45;
+    text-decoration: none;
+    padding: 10px 20px;
+    border: 1px solid #ff7a45;
+    border-radius: 4px;
+    transition: background .2s, border-color .2s, color .2s;
+}
+.links a:hover, .links a:focus-visible { background: rgba(255, 122, 69, 0.12); border-color: #ffa36e; color: #ffa36e; outline: none; }
+
+@media (max-width: 768px) {
+    h1 { font-size: 1.9rem; }
+    .content { padding: 24px 20px; }
+    .results-table { display: block; overflow-x: auto; }
+}

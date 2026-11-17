@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOOM - Benas Petronis</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; background: #000; color: #e0e0e0; font-family: 'Times New Roman', serif; overflow: hidden; }
+        body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 12px; }
+        #bar { width: min(960px, 100%); display: flex; justify-content: space-between; gap: 16px; font-size: .95rem; color: #9aa3b8; }
+        #bar a { color: #ff7a45; text-decoration: none; }
+        #bar a:hover { color: #ffa36e; }
+        #stage { position: relative; width: min(960px, 100%); aspect-ratio: 16 / 10; max-height: calc(100vh - 90px); background: #000; border: 1px solid #5a1f10; border-radius: 4px; }
+        #stage > *:not(#status) { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; }   /* js-dos wraps the canvas in its own div */
+        #jsdos { position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; background: #000; image-rendering: pixelated; }
+        #status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; color: #ff7a45; font-size: 1.1rem; padding: 20px; pointer-events: none; }
+        #hint { font-size: .85rem; color: #6f7790; }
+    </style>
+</head>
+<body>
+    <div id="bar">
+        <a href="/">← Back to portfolio</a>
+        <span>DOOM · shareware episode 1 · runs in your browser via js-dos</span>
+    </div>
+    <div id="stage">
+        <canvas id="jsdos" tabindex="0"></canvas>
+        <div id="status">Loading DOOM… (about 2&nbsp;MB)</div>
+    </div>
+    <div id="hint">Click the game to focus. Arrows move · Ctrl fire · Space open doors · Shift run · Enter / Esc menu</div>
+
+    <script src="https://js-dos.com/6.22/current/js-dos.js"></script>
+    <script>
+        (function () {
+            var status = document.getElementById('status');
+            var canvas = document.getElementById('jsdos');
+            if (typeof Dos === 'undefined') { status.textContent = 'Could not load the DOS emulator (blocked or offline).'; return; }
+
+            Dos(canvas, { wdosboxUrl: 'https://js-dos.com/6.22/current/wdosbox.js' }).ready(function (fs, main) {
+                fs.extract('https://js-dos.com/cdn/upload/DOOM-@evilution.zip').then(function () {
+                    status.remove();
+                    document.title = 'DOOM - Benas Petronis';      // js-dos renames the tab to "DOSBox"
+                    main(['-c', 'cd DOOM', '-c', 'DOOM.EXE']).then(function () { canvas.focus(); });
+                }).catch(function () {
+                    status.textContent = 'Could not download the game files.';
+                });
+            });
+
+            canvas.addEventListener('click', function () { canvas.focus(); });
+
+            // js-dos renames the tab to "DOSBox"; keep ours.
+            var TITLE = 'DOOM - Benas Petronis';
+            new MutationObserver(function () { if (document.title !== TITLE) document.title = TITLE; })
+                .observe(document.querySelector('title'), { childList: true, characterData: true, subtree: true });
+        })();
+    </script>
+</body>
+</html>

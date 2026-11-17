@@ -8,6 +8,18 @@
       "destination": "/blog/index.html"
     },
     {
+      "source": "/doom",
+      "destination": "/doom.html"
+    },
+    {
+      "source": "/:path*/doom",
+      "destination": "/doom.html"
+    },
+    {
+      "source": "/:path*/doom/",
+      "destination": "/doom.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

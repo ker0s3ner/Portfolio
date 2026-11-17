@@ -4,183 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rocket Trajectories - Benas Petronis</title>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <script>
         window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']],
-                displayMath: [['$$', '$$'], ['\\[', '\\]']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+            svg: { fontCache: 'none' }
         };
     </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Latin+Modern+Roman:wght@400;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Latin Modern Roman', 'Computer Modern', 'Times New Roman', serif;
-            background: #000;
-            color: #e0e0e0;
-            line-height: 1.6;
-        }
-
-        #math-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
-            overflow: hidden;
-        }
-
-        .formula {
-            position: absolute;
-            color: rgba(100, 150, 255, 0.15);
-            pointer-events: none;
-            white-space: nowrap;
-            animation: fadeInOut 12s ease-in-out infinite;
-            font-size: 16px;
-        }
-
-        @keyframes fadeInOut {
-            0%, 100% { opacity: 0; }
-            50% { opacity: 0.3; }
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .back-link {
-            color: #6b9eff;
-            text-decoration: none;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-            display: inline-block;
-        }
-
-        .back-link:hover {
-            color: #8bb4ff;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 400;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .meta {
-            color: #6b9eff;
-            font-size: 1rem;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 40px;
-        }
-
-        .tag {
-            background: rgba(107, 158, 255, 0.15);
-            color: #6b9eff;
-            padding: 6px 14px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(107, 158, 255, 0.2);
-        }
-
-        .content {
-            background: rgba(20, 20, 30, 0.6);
-            padding: 40px;
-            border-radius: 8px;
-            border: 1px solid rgba(100, 150, 255, 0.1);
-            margin-bottom: 30px;
-        }
-
-        .content h2 {
-            font-size: 1.8rem;
-            font-weight: 400;
-            color: #fff;
-            margin: 30px 0 20px 0;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-
-        .content h2:first-child {
-            margin-top: 0;
-        }
-
-        .content h3 {
-            font-size: 1.4rem;
-            font-weight: 400;
-            color: #e0e0e0;
-            margin: 25px 0 15px 0;
-        }
-
-        .content p {
-            color: #b0b0b0;
-            line-height: 1.8;
-            margin-bottom: 15px;
-        }
-
-        .content ul {
-            margin-left: 30px;
-            margin-bottom: 15px;
-        }
-
-        .content li {
-            color: #b0b0b0;
-            margin-bottom: 10px;
-        }
-
-        .highlight {
-            background: rgba(107, 158, 255, 0.1);
-            padding: 20px;
-            border-left: 3px solid #6b9eff;
-            margin: 20px 0;
-        }
-
-        .links {
-            display: flex;
-            gap: 20px;
-            margin-top: 30px;
-        }
-
-        .links a {
-            color: #6b9eff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border: 1px solid #6b9eff;
-            border-radius: 4px;
-            transition: all 0.3s;
-        }
-
-        .links a:hover {
-            background: rgba(107, 158, 255, 0.1);
-            border-color: #8bb4ff;
-        }
-    </style>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <link rel="stylesheet" href="assets/site.css">
+    <link rel="stylesheet" href="assets/page.css">
 </head>
 <body>
-    <div id="math-background"></div>
+    <div id="spectral-bg" aria-hidden="true"></div>
     
     <div class="container">
         <a href="index.html" class="back-link">← Back to portfolio</a>
@@ -278,43 +114,6 @@
         </div>
     </div>
 
-    <script>
-        // Simplified background formulas for project page
-        const mathFormulas = [
-            "$\\nabla_X Y - \\nabla_Y X = [X,Y]$",
-            "$R(X,Y)Z = \\nabla_X\\nabla_Y Z - \\nabla_Y\\nabla_X Z$",
-            "$\\int_M d\\omega = \\int_{\\partial M} \\omega$",
-            "$L_g(\\gamma) = v_e \\ln\\frac{1}{\\varepsilon_1}$",
-            "$\\Delta v = v_e \\ln\\frac{m_0}{m_f}$",
-        ];
-
-        const background = document.getElementById('math-background');
-        const maxFormulas = 8;
-
-        function createFormula() {
-            const formula = document.createElement('div');
-            formula.className = 'formula';
-            formula.innerHTML = mathFormulas[Math.floor(Math.random() * mathFormulas.length)];
-            
-            formula.style.left = Math.random() * 90 + '%';
-            formula.style.top = Math.random() * 90 + '%';
-            formula.style.fontSize = (Math.random() * 8 + 14) + 'px';
-            formula.style.animationDelay = Math.random() * 6 + 's';
-            
-            background.appendChild(formula);
-            
-            if (window.MathJax && window.MathJax.typesetPromise) {
-                window.MathJax.typesetPromise([formula]).catch((err) => console.log(err));
-            }
-        }
-
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                for (let i = 0; i < maxFormulas; i++) {
-                    createFormula();
-                }
-            }, 500);
-        });
-    </script>
+    <script src="assets/spectral-bg.js"></script>
 </body>
 </html>
