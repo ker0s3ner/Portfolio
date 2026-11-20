@@ -13,6 +13,8 @@ The site is static HTML with a LaTeX-style title block on the home page, plus a 
 | `matrix-proof.html`, `determinant proof.pdf` | A proof about matrix determinants |
 | `rocket-geometry.html`, `Differential trajectories.pdf` | Rocket trajectories and differential geometry |
 | `reentry-feasibility.html` | Mach-16+ re-entry feasibility study |
+| `doom.html` | A DOOM page (served at `/doom`) |
+| `facelab.html`, `kalimba.html` | Project pages for FaceLab and Kalimba |
 | `custom-language.html` | Project page for [Marila](https://github.com/ker0s3ner/Marila), a mathematical programming language |
 | `chemistry-tool.html` | Project page for [Catalyst](https://github.com/ker0s3ner/catalyst), a chemistry TUI |
 | `pentesting.html` | Penetration testing terminal write-up |
@@ -37,6 +39,8 @@ The site is static HTML with a LaTeX-style title block on the home page, plus a 
    ```
 2. `npm run build`, open `blog/` to check it, commit, push. Files starting with `_` are ignored (use them for drafts).
 
+Leftover drafts (`index_final.html`, `index_temp2.html`, `index.html.backup`, `Portfolio.html`) are not linked from the site.
+
 ## Development
 
 Requires Node.js.
@@ -53,7 +57,7 @@ Open `index.html` in a browser, or serve the folder with any static server. The 
 
 ## Deployment
 
-Deployed on Vercel. `vercel.json` runs `npm run build`, serves the repo root, and rewrites all routes to `index.html`.
+Deployed on Vercel. `vercel.json` runs `npm run build`, serves the repo root, and rewrites `/blog` to `blog/index.html` and `/doom` to `doom.html`; every other route falls back to `index.html`.
 
 ## Contact
 
